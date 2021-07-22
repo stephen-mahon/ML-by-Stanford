@@ -12,10 +12,13 @@ J = 0;
 % ====================== YOUR CODE HERE ======================
 % Instructions: Compute the cost of a particular choice of theta
 %               You should set J to the cost.
+%               h(\theta) = \theta^T x = \theta_0 +\theta_1 x_1
+%               J(\theta_0, \theta_1) =
+%                   \frac{1}{2m}\sum_{i=1}^{m}(h_\theta(x_i)-y_i)^2
 
+h = X * theta;
 
-
-
+J = (1/(2*m)*sum((h - y).^2));
 
 % =========================================================================
 
