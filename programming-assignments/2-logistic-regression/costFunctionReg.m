@@ -17,25 +17,23 @@ grad = zeros(size(theta));
 %               Compute the partial derivatives and set grad to the partial
 %               derivatives of the cost w.r.t. each parameter in theta
 
-
-
 h = sigmoid(X * theta);
+%J = (1/m)*sum(-y.*log(h) - (1-y).* log(1-h)) + (lambda/(2*m)*sum(theta.^2));
 
-for i = 1:m
-    if i != 1
-        J(i) = (1/m)*sum(-y(i).*log(h(i)) - (1-y(i)) .* log(1-h(i)))+(lambda/(2*m)*sum(theta.^2));
-    end
-end
+% Compute cost function
+templog(:,1) = log(sigmoid(X*theta));
+templog(:,2) = log(1-(sigmoid(X*theta)));
+tempy(:,1) = y;
+tempy(:,2) = 1-y;
+temp = templog.*tempy;
 
-J = sum(J);
+% Formula for cost function. Note theta0 not involved in reglarization
+J = (1/m)*(-sum(temp(:,1))-sum(temp(:,2))) + (lambda/(2*m))*sum(theta(2:end,1).^2);
 
-for j = 1:length(grad)
-    if j == 1
-        grad(j) = (1/m)*sum((h-y).*X(:,j));
-    else
-        grad(j) = (1/m)*sum((h-y).*X(:,j))+(lambda/m)*theta(j);
-    end
-end
+grad(1,1) = (1/m)*sum((sigmoid(X*theta)-y).*X(:,1)); 
+grad(2:end,1)=((1/m)*((sigmoid(X*theta)-y)'*X(:,2:end)))'+(lambda/m)*theta(2:end);
+
+grad = grad(:);
 
 % =============================================================
 
